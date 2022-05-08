@@ -1,44 +1,33 @@
 package com.bridge;
 
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class EmpPayRoll {
     public static void main(String[] args) {
-        String FETCH = "SELECT * FROM employee_payroll";
-        ArrayList<EmpInfo> empList = new ArrayList<>();
-        EmpConnection service = new EmpConnection();
-        service.getConnection();
-        PreparedStatement preparedStatement;
-        try{
-            preparedStatement = service.getConnection().prepareStatement(FETCH);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                EmpInfo employee = new EmpInfo();
-
-                employee.setId(resultSet.getInt("id"));
-                employee.setName(resultSet.getString("name"));
-                employee.setPhoneNo(resultSet.getString("phoneNo"));
-                employee.setEmpAddress(resultSet.getString("empAddress"));
-                employee.setDept(resultSet.getString("dept"));
-                employee.setStartDate(resultSet.getString("startDate"));
-                employee.setBasicPay(resultSet.getDouble("BasicPay"));
-                employee.setDeductions(resultSet.getDouble("Deductions"));
-                employee.setTaxablePay(resultSet.getDouble("TaxablePay"));
-                employee.setIncomeTax(resultSet.getDouble("IncomeTax"));
-                employee.setNetPay(resultSet.getDouble("NetPay"));
-
-                empList.add(employee);
+        EmpPayRollService employeePayRollService = new EmpPayRollService();
+        Scanner scanner = new Scanner(System.in);
+        final int EXIT = 4;
+        int option = 0;
+        while (option != EXIT) {
+            System.out.println("enter your choice\n1. Execute query\n2. update basic pay\n3. display employee roll\n4. EXIT");
+            option = scanner.nextInt();
+            switch (option) {
+                case 1 : {
+                    String query = "select * from employee_payroll";
+                    employeePayRollService.queryExecute(query);
+                    employeePayRollService.display();
+                }
+                case 2 : {
+                    System.out.println("enter employee name");
+                    String empName = scanner.next();
+                    System.out.println("enter basic pay you want to update");
+                    double basicPay = scanner.nextDouble();
+                    employeePayRollService.updateBasicPay(empName, basicPay);
+                }
+                case 3 : EmpPayRollService.display();
+                case 4: System.out.println("exiting...");
             }
-            for (EmpInfo i : empList) {
-                System.out.println(i.toString());
-            }
-
-        } catch (SQLException e) {
-            throw new EmpException("invalid column label");
         }
     }
 

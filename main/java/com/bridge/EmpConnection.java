@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class EmpConnection {
 
-    Connection getConnection() {
+    static Connection getConnection() {
         String URL = "jdbc:mysql://localhost:3306/payroll_services";
         String USERNAME = "root";
         String PASSWORD = "password";

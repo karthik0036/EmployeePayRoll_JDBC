@@ -1,9 +1,17 @@
 package com.bridge;
 
+import java.util.ArrayList;
+
 public class EmpInfo {
     int id;
     String name, phoneNo, empAddress, dept, startDate, gender;
     double BasicPay, Deductions, TaxablePay, IncomeTax, NetPay;
+
+    ArrayList<EmpInfo> empList;
+
+    public ArrayList<EmpInfo> getEmpList() {
+        return empList;
+    }
 
     public int getId() {
         return id;
