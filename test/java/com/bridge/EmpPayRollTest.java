@@ -16,7 +16,7 @@ public class EmpPayRollTest {
 
     @Test
     public void givenUpdatingCersiBasicPay_whenUpdate_ShouldReturnUpdatedPay() {
-        double BasicPay = 30000;
+        double BasicPay = 40000;
         String Name = "Cersi";
         double salaryUpdated = employeePayRollService.updateBasicPay(Name, BasicPay);
         Assert.assertEquals(BasicPay, salaryUpdated,0.0);
