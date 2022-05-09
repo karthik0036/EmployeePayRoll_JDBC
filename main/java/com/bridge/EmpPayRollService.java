@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class EmpPayRollService {
 
@@ -103,6 +104,66 @@ public class EmpPayRollService {
 
         } catch (SQLException e) {
             throw new EmpException("Invalid date");
+        }
+    }
+    public void calculate() {
+        Scanner scanner = new Scanner(System.in);
+
+        final int EXIT = 6;
+        int option = 0;
+        while (option != EXIT) {
+            System.out.println("enter your choice\n1. SUM\n2. AVG\n3. MIN\n4. MAX  \n5.COUNT\n6.EXIT\n");
+            option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    calculateQuery("SELECT Gender, SUM(BasicPay) FROM employee_payroll GROUP BY Gender");
+                    break;
+
+                case 2:
+                    calculateQuery("SELECT Gender, AVG(BasicPay) FROM employee_payroll GROUP BY Gender");
+                    break;
+
+                case 3:
+                    calculateQuery("SELECT Gender, MIN(BasicPay) FROM employee_payroll GROUP BY Gender");
+                    break;
+                case 4:
+                    calculateQuery("SELECT Gender, MAX(BasicPay) FROM employee_payroll GROUP BY Gender");
+                    break;
+                case 5:
+                    calculateQuery("SELECT Gender, COUNT(BasicPay) FROM employee_payroll GROUP BY Gender");
+                    break;
+            }
+        }
+    }
+    /*
+     * this method is used to print the basic pay by using the gender
+     * @param calculate
+     */
+
+    public void calculateQuery(String calculate) {
+        List<EmpInfo> result = new ArrayList<EmpInfo>();
+
+        try {
+            preparedStatement = connection.prepareStatement(calculate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                EmpInfo employee = new EmpInfo();
+                employee.setGender(resultSet.getString(1));
+                employee.setBasicPay(resultSet.getDouble(2));
+
+                result.add(employee);
+            }
+            if (calculate.contains("COUNT")) {
+                for (EmpInfo i : result) {
+                    System.out.println("Gender: " + i.getGender() + " COUNT: " + i.getBasicPay());
+                }
+            } else {
+                for (EmpInfo i : result) {
+                    System.out.println("Gender: " + i.getGender() + " Basic pay: " + i.getBasicPay());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
